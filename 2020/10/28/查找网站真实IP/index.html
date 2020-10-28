@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="通达OA RCE漏洞复现, Hexo">
+    <meta name="keywords" content="CDN 查找网站真实IP, Hexo">
     <meta name="description" content="每天进步亿点点">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>通达OA RCE漏洞复现 | Hexo</title>
+    <title>CDN 查找网站真实IP | Hexo</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -308,12 +308,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/20.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">通达OA RCE漏洞复现</h1>
+                    <h1 class="description center-align post-title">CDN 查找网站真实IP</h1>
                 </div>
             </div>
         </div>
@@ -430,8 +430,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/web/">
-                                <span class="chip bg-color">web</span>
+                            <a href="/tags/DB/">
+                                <span class="chip bg-color">DB</span>
                             </a>
                         
                     </div>
@@ -455,7 +455,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-09-26
+                    2020-10-28
                 </div>
                 
 
@@ -471,18 +471,49 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="通达OA-RCE漏洞复现"><a href="#通达OA-RCE漏洞复现" class="headerlink" title="通达OA RCE漏洞复现"></a>通达OA RCE漏洞复现</h1><p>1.环境搭建:</p>
-<p>通达OA11.6下载安装.安装后进入首页如图所示:</p>
-<p><a target="_blank" rel="noopener" href="https://sbimg.cn/image/GHiYj"><img src="https://wx1.sbimg.cn/2020/09/26/GHiYj.md.png" alt="GHiYj.md.png"></a></p>
-<p>2.复现过程及结果.</p>
-<p>使用 pocsuite3 插件对目标环境进行测试</p>
-<p><a href="https://github.com/knownsec/pocsuite3">https://github.com/knownsec/pocsuite3</a></p>
-<p><a target="_blank" rel="noopener" href="https://sbimg.cn/image/GHvXD"><img src="https://wx1.sbimg.cn/2020/09/26/GHvXD.md.png" alt="GHvXD.md.png"></a></p>
-<p>成功写入 phpinfo()函数</p>
-<p><a target="_blank" rel="noopener" href="https://sbimg.cn/image/GHUcN"><img src="https://wx1.sbimg.cn/2020/09/26/GHUcN.md.png" alt="GHUcN.md.png"></a></p>
-<p>3.修复建议:</p>
-<p>官方已于2020-07-05 发布通达OA 11.7版本,请尽快升级至最新版本</p>
-<p><a target="_blank" rel="noopener" href="https://www.tongda2000.com/download/p2019.php?F=baidu_natural&amp;K=">https://www.tongda2000.com/download/p2019.php?F=baidu_natural&amp;K=</a></p>
+                <h2 id="0x01判断是否存在CDN"><a href="#0x01判断是否存在CDN" class="headerlink" title="0x01判断是否存在CDN"></a>0x01判断是否存在CDN</h2><p>​    查找网站真实IP的第一步是先查看当前站点是否部署了CDN，而较为简单快捷的方式就是通过本地Nslookup查询目标站点的DNS记录，若存在CDN，则返回CDN服务器的地址，若不存在CDN,则返回的单个IP地址，我们认为它就是目标站点的真实IP，下图为使用了CDN站点的示例：</p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/B1j0zV"><img src="https://s1.ax1x.com/2020/10/28/B1j0zV.png" alt="B1j0zV.png"></a></p>
+<p>​    除了使用nslookup，还可以通过第三方站点的DNS解析记录或者多地ping的方式去判断是否存在CDN。判断CDN只是个开始，不加赘述……</p>
+<h2 id="0x02Bypass-CDN的常见姿势"><a href="#0x02Bypass-CDN的常见姿势" class="headerlink" title="0x02Bypass CDN的常见姿势"></a>0x02Bypass CDN的常见姿势</h2><p>​    BypassCDN的常见姿势可参考“信安之路”的这位大佬写的文章，个人觉得已经总结的很完善了，文章链接&gt;&gt;&gt;<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/JoE4Y0amhsznx10OtmuCxg%E3%80%82">https://mp.weixin.qq.com/s/JoE4Y0amhsznx10OtmuCxg。</a></p>
+<p>下面是小伙伴们的一些想法，手法命名比较抽象，所述内容可能会引起大佬们的不适，我只想说：</p>
+<p>![img](<a target="_blank" rel="noopener" href="https://mmbiz.qpic.cn/mmbiz_png/Ov836aiagXu6BsnNfeCU1FcGMBrXNopuEZZNGKcPAl9xtbhDCeyy2dh0mNWhKHLtOaxibZfSQJPTEbgp0Bmq4Z0g/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1">https://mmbiz.qpic.cn/mmbiz_png/Ov836aiagXu6BsnNfeCU1FcGMBrXNopuEZZNGKcPAl9xtbhDCeyy2dh0mNWhKHLtOaxibZfSQJPTEbgp0Bmq4Z0g/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1</a></p>
+<h3 id="小伙伴-胡大毛的www法"><a href="#小伙伴-胡大毛的www法" class="headerlink" title="小伙伴-胡大毛的www法"></a>小伙伴-胡大毛的www法</h3><p>以前用CDN的时候有个习惯，只让WWW域名使用cdn，秃域名不适用，为的是在维护网站时更方便，不用等cdn缓存。所以试着把目标网站的www去掉，ping一下看ip是不是变了，您别说，这个方法还真是屡用不爽。</p>
+<h3 id="小伙伴-刘正经的二级域名法"><a href="#小伙伴-刘正经的二级域名法" class="headerlink" title="小伙伴-刘正经的二级域名法"></a>小伙伴-刘正经的二级域名法</h3><p>目标站点一般不会把所有的二级域名放cdn上，比如试验性质的二级域名。Google site一下目标的域名，看有没有二级域名出现，挨个排查，确定了没使用cdn的二级域名后，本地将目标域名绑定到同ip，能访问就说明目标站与此二级域名在同一个服务器上。不在同一服务器也可能在同C段，扫描C段所有开80端口的ip，挨个试。如果google搜不到也不代表没有，我们拿常见的二级域名构造一个字典，猜出它的二级域名。比如mail、cache、img。</p>
+<p>查询子域名工具：layer子域名挖掘机 subdomin</p>
+<p>扫描c段好用工具：zmap(<a target="_blank" rel="noopener" href="https://www.cnblogs.com/China-Waukee/p/9596790.html">https://www.cnblogs.com/China-Waukee/p/9596790.html</a>)</p>
+<h3 id="还是“刘正经”的nslookup法"><a href="#还是“刘正经”的nslookup法" class="headerlink" title="还是“刘正经”的nslookup法"></a>还是“刘正经”的nslookup法</h3><p>查询域名的NS记录，其域名记录中的MX记录，TXT记录等很有可能指向的是真实ip或同C段服务器。</p>
+<p>注：域名解析–什么是A记录、别名记录(CNAME)、MX记录、TXT记录、NS记录（<a target="_blank" rel="noopener" href="https://www.22.cn/help_34.html%EF%BC%89">https://www.22.cn/help_34.html）</a></p>
+<h3 id="小伙伴-胡小毛的工具法"><a href="#小伙伴-胡小毛的工具法" class="headerlink" title="小伙伴-胡小毛的工具法"></a>小伙伴-胡小毛的工具法</h3><p>这个工具<a target="_blank" rel="noopener" href="http://toolbar.netcraft.com据说会记录网站的ip变化情况,通过目标网站的历史ip地址就可以找到真实ip.没亲自测试,想必不是所有的网站都能查到./">http://toolbar.netcraft.com据说会记录网站的ip变化情况，通过目标网站的历史ip地址就可以找到真实ip。没亲自测试，想必不是所有的网站都能查到。</a></p>
+<p>例：<a target="_blank" rel="noopener" href="http://toolbar.netcraft.com/site_report?url=http://www.waitalone.cn">http://toolbar.netcraft.com/site_report?url=http://www.waitalone.cn</a></p>
+<h3 id="小伙伴-狄弟弟的目标敏感文件泄露"><a href="#小伙伴-狄弟弟的目标敏感文件泄露" class="headerlink" title="小伙伴-狄弟弟的目标敏感文件泄露"></a>小伙伴-狄弟弟的目标敏感文件泄露</h3><p>也许目标服务器上存在一些泄露的敏感文件中会告诉我们网站的IP,另外就是如phpinfo之类的探针。</p>
+<h3 id="小伙伴-匿名H的墙外法"><a href="#小伙伴-匿名H的墙外法" class="headerlink" title="小伙伴-匿名H的墙外法"></a>小伙伴-匿名H的墙外法</h3><p>很多国内的CDN没有节点对国外服务，国外的请求会直接指向真实ip。有人说用国外NS和或开国外VPN，但这样成功率太低了。我的方法是用国外的多节点ping工具，例如just-ping，全世界几十个节点ping目标域名，很有可能找到真实ip。</p>
+<p>域名：<a target="_blank" rel="noopener" href="http://www.just-ping.com/">http://www.just-ping.com/</a></p>
+<h3 id="小伙伴-不靠谱的从CDN入手法"><a href="#小伙伴-不靠谱的从CDN入手法" class="headerlink" title="小伙伴-不靠谱的从CDN入手法"></a>小伙伴-不靠谱的从CDN入手法</h3><p>无论是用社工还是其他手段，反正是拿到了目标网站管理员在CDN的账号了，此时就可以自己在CDN的配置中找到网站的真实IP了。此法着实适用于“小伙伴-不靠谱”使用。</p>
+<h3 id="还是“不靠谱”的钓鱼法"><a href="#还是“不靠谱”的钓鱼法" class="headerlink" title="还是“不靠谱”的钓鱼法"></a>还是“不靠谱”的钓鱼法</h3><p>不管网站怎么CDN，其向用户发的邮件一般都是从自己服务器发出来的。以wordpress为例，假如我要报复一个来我这捣乱的坏蛋，坏蛋使用了 CDN，我要找到它的真实ip以便DDOS他。我的方法是在他博客上留言，再自己换个名回复自己，然后收到他的留言提醒邮件，就能知道发邮件的服务器ip 了。如果他没开提醒功能，那就试试他是不是开启了注册功能，wordpress默认是用邮件方式发密码的。</p>
+<h2 id="0x03“最后”的总结"><a href="#0x03“最后”的总结" class="headerlink" title="0x03“最后”的总结"></a>0x03“最后”的总结</h2><p>   小伙伴“最后”来了一波总结：</p>
+<p><strong>百因必有果，你的报应就是我<del>o</del></strong></p>
+<p><strong>万剑归宗不是火，万法合一才是果<del>o</del></strong></p>
+<p>小伙伴们总结了一波又一波方法，“最后”表示不太行，方法很多，每一个看起来都很实用，但实战告诉我们，只有把这些方法都灵活贯通的结合使用才能达到最大的效果。“最后”以胡大毛的www法结合查找网站历史DNS解析记录的方法查找某个站点的真实IP的举例如下：</p>
+<p>某站点<a href="http://www.xxx.com的当前解析显示有多个IP，但历史解析仅有一个IP，可以猜测该IP可能是真实IP，查询记录如下：">www.xxx.com的当前解析显示有多个IP，但历史解析仅有一个IP，可以猜测该IP可能是真实IP，查询记录如下：</a></p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/B1jHdH"><img src="https://s1.ax1x.com/2020/10/28/B1jHdH.png" alt="B1jHdH.png"></a></p>
+<p>接着通过去除www头，查询xxx.com的DNS解析信息可以发现当前解析即为上面查到的<a href="http://www.xxx.com的历史解析，到此基本能判断www.xxx.com的真实IP了，查询记录如下：">www.xxx.com的历史解析，到此基本能判断www.xxx.com的真实IP了，查询记录如下：</a></p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/B1vVS0"><img src="https://s1.ax1x.com/2020/10/28/B1vVS0.jpg" alt="B1vVS0.jpg"></a></p>
+<p> “最后”认为除了需要将方法结合使用之外，辅助工具也是不可缺少的，于是又整理了一波常用的工具和查询平台如下：</p>
+<p>  1、查询SSL证书或历史DNS记录</p>
+<p><a target="_blank" rel="noopener" href="https://censys.io/certificates/">https://censys.io/certificates/</a>  ###通过SSL证书查询真实IP（推荐）</p>
+<p><a target="_blank" rel="noopener" href="https://site.ip138.com/">https://site.ip138.com/</a>  ###DNS、IP等查询</p>
+<p><a target="_blank" rel="noopener" href="http://ping.chinaz.com/">http://ping.chinaz.com/</a>  ###多地ping</p>
+<p><a target="_blank" rel="noopener" href="http://ping.aizhan.com/">http://ping.aizhan.com/</a>  ###多地ping</p>
+<p><a target="_blank" rel="noopener" href="https://myssl.com/dns_check.html#dns_check">https://myssl.com/dns_check.html#dns_check</a>  ###DNS查询</p>
+<p><a target="_blank" rel="noopener" href="https://securitytrails.com/">https://securitytrails.com/</a>  ### DNS查询</p>
+<p><a target="_blank" rel="noopener" href="https://dnsdb.io/zh-cn/">https://dnsdb.io/zh-cn/</a>   ###DNS查询</p>
+<p><a target="_blank" rel="noopener" href="https://x.threatbook.cn/">https://x.threatbook.cn/</a>  ###微步在线</p>
+<p><a target="_blank" rel="noopener" href="http://toolbar.netcraft.com/site_report?url=">http://toolbar.netcraft.com/site_report?url=</a>  ###在线域名信息查询</p>
+<p><a target="_blank" rel="noopener" href="http://viewdns.info/">http://viewdns.info/</a>  ###DNS、IP等查询</p>
+<p><a target="_blank" rel="noopener" href="https://tools.ipip.net/cdn.php">https://tools.ipip.net/cdn.php</a>  ###CDN查 询IP</p>
+<p>2、相关工具</p>
+<p>子域名查询工具：layer子域名挖掘机，dirbrute，Oneforal（下载链接：<a href="https://github.com/shmilylty/OneForAll%EF%BC%8C%E6%8E%A8%E8%8D%90%EF%BC%89">https://github.com/shmilylty/OneForAll，推荐）</a></p>
+<p>站点banner信息获取：Zmap，masscan等。</p>
 
             </div>
             <hr/>
@@ -508,7 +539,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://github.com/naxingba/naxingba.github.io/2020/09/26/%E9%80%9A%E8%BE%BEOA%20RCE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">https://github.com/naxingba/naxingba.github.io/2020/09/26/%E9%80%9A%E8%BE%BEOA%20RCE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</a>
+                    <a href="https://github.com/naxingba/naxingba.github.io/2020/10/28/%E6%9F%A5%E6%89%BE%E7%BD%91%E7%AB%99%E7%9C%9F%E5%AE%9EIP/">https://github.com/naxingba/naxingba.github.io/2020/10/28/%E6%9F%A5%E6%89%BE%E7%BD%91%E7%AB%99%E7%9C%9F%E5%AE%9EIP/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -546,8 +577,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/web/">
-                                    <span class="chip bg-color">web</span>
+                                <a href="/tags/DB/">
+                                    <span class="chip bg-color">DB</span>
                                 </a>
                             
                         </div>
@@ -715,9 +746,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2020/10/28/%E6%9F%A5%E6%89%BE%E7%BD%91%E7%AB%99%E7%9C%9F%E5%AE%9EIP/">
                     <div class="card-image">
@@ -735,9 +767,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-10-28
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-10-28
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -750,6 +782,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -765,7 +798,7 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
                 <a href="/2020/09/26/%E9%80%9A%E8%BE%BEOA%20RCE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
@@ -799,7 +832,6 @@
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
